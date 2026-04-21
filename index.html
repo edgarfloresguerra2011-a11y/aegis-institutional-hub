@@ -542,11 +542,11 @@
             
             /* Universal Typography Reset */
             h1, h2, .section-title, .hero h1 { 
-                font-size: 2.2rem !important; 
+                font-size: 2.0rem !important; 
                 line-height: 1.1 !important; 
                 margin-bottom: 20px !important; 
                 text-align: left !important; 
-                letter-spacing: -1px !important;
+                letter-spacing: -0.5px !important;
             }
             h1 span, h2 span { display: inline !important; }
 
@@ -556,7 +556,7 @@
                 min-height: auto !important;
                 height: auto !important;
             }
-            .hero p, .lead-text, .section p { 
+            .hero p, .lead-text, .section p, .glass-card p { 
                 font-size: 0.95rem !important; 
                 margin-bottom: 20px !important; 
                 max-width: 100% !important; 
@@ -573,11 +573,11 @@
                 border-left: 2px solid var(--color-2) !important;
                 display: flex !important;
             }
-            .stat-item h3 { font-size: 1.8rem !important; color: var(--color-2) !important; margin: 0 !important; }
-            .stat-item p { font-size: 0.65rem !important; opacity: 0.7 !important; }
+            .stat-item h3 { font-size: 1.6rem !important; color: var(--color-2) !important; margin: 0 !important; }
+            .stat-item p { font-size: 0.6rem !important; opacity: 0.7 !important; }
             
-            .section { padding: 40px 20px !important; }
-            .section-title { margin-top: 20px !important; }
+            section { padding: 40px 20px !important; }
+            .section-title { margin-top: 20px !important; font-size: 2.0rem !important; margin-bottom: 30px !important; }
             
             .specs-grid, .plans-container, .contact-container, .footer-grid { 
                 grid-template-columns: 1fr !important; 
@@ -586,40 +586,61 @@
             }
             
             nav { padding: 15px 20px !important; }
-            .logo { font-size: 1.3rem !important; }
+            .logo { font-size: 1.4rem !important; }
             .nav-links { display: none !important; }
             
             #truth-synthesis-stream { display: none !important; }
             .hero-diagram { height: 40% !important; bottom: 0; top: auto !important; opacity: 0.08 !important; }
             
-            .version-badge { font-size: 0.5rem !important; padding: 3px 6px !important; }
+            .version-badge { font-size: 0.55rem !important; padding: 4px 8px !important; margin-bottom: 15px !important; }
             
             /* Destructive Technical Card Reset */
-            .arch-table, .arch-table thead, .arch-table tbody, .arch-table th, .arch-table td, .arch-table tr { 
+            .tech-table, .tech-table thead, .tech-table tbody, .tech-table th, .tech-table td, .tech-table tr { 
                 display: block !important; 
                 width: 100% !important;
             }
-            thead, .arch-table thead { display: none !important; }
-            .arch-table tr { 
+            .tech-table thead { display: none !important; }
+            .tech-table tr { 
                 margin-bottom: 20px !important; 
                 border: 1px solid rgba(201,169,110,0.1) !important; 
                 padding: 15px !important;
                 background: rgba(255,255,255,0.02) !important;
+                transform: none !important;
+                opacity: 1 !important;
+                animation: none !important;
             }
-            .arch-table td { 
-                padding: 5px 0 !important; 
+            .tech-table td { 
+                padding: 8px 0 !important; 
                 text-align: left !important;
                 border: none !important;
             }
-            .level-code { font-size: 0.65rem !important; display: block !important; margin-bottom: 4px !important; }
-            .component-name { font-size: 1rem !important; margin-bottom: 6px !important; }
-            .component-desc { font-size: 0.8rem !important; line-height: 1.4 !important; }
+            .tech-table td:before {
+                content: attr(data-label);
+                display: block;
+                font-family: var(--font-display);
+                font-size: 0.7rem;
+                color: var(--color-2);
+                margin-bottom: 4px;
+                letter-spacing: 1px;
+            }
+
+            /* Component Styling in Mobile View */
+            .tech-table td:nth-child(1) { font-family: var(--font-display); font-size: 0.9rem; color: var(--color-2); border-bottom: 1px solid rgba(255,255,255,0.05) !important; margin-bottom: 10px; padding-bottom: 10px !important; }
+            .tech-table td:nth-child(2) { font-family: var(--font-display); font-size: 1.1rem; color: #fff; }
+            .tech-table td:nth-child(3) { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
 
             /* Card Adjustments */
-            .card { padding: 20px !important; }
-            h3 { font-size: 1.2rem !important; margin-bottom: 10px !important; }
-            .price { font-size: 1.8rem !important; }
+            .glass-card, .plan-card { padding: 25px !important; }
+            h3, .glass-card h3, .plan-card h3, .war-room-title { font-size: 1.4rem !important; margin-bottom: 15px !important; }
+            .plan-price { font-size: 2.2rem !important; margin: 15px 0 !important; }
+            .plan-features li { font-size: 0.9rem !important; margin-bottom: 8px !important; }
+            .submit-btn { width: 100% !important; padding: 15px !important; font-size: 1.2rem !important; }
+            
+            .war-room-photo { margin-bottom: 30px !important; }
+            
+            .copyright { flex-direction: column !important; gap: 10px !important; text-align: center !important; }
         }
+
     </style>
 </head>
 <body>
@@ -767,29 +788,29 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>L0: Signal Extraction</td>
-                        <td>NEURAL HARVESTER</td>
-                        <td>Real-time multi-vector signal excavation & raw data ingestion.</td>
+                        <td data-label="LAYER">L0: Signal Extraction</td>
+                        <td data-label="COMPONENT">NEURAL HARVESTER</td>
+                        <td data-label="FUNCTION">Real-time multi-vector signal excavation & raw data ingestion.</td>
                     </tr>
                     <tr>
-                        <td>L1: Probabilistic Engine</td>
-                        <td>BAYESIAN PROCESSOR</td>
-                        <td>Logit manifold mapping → Isotonic calibration (Brier 0.1499).</td>
+                        <td data-label="LAYER">L1: Probabilistic Engine</td>
+                        <td data-label="COMPONENT">BAYESIAN PROCESSOR</td>
+                        <td data-label="FUNCTION">Logit manifold mapping → Isotonic calibration (Brier 0.1499).</td>
                     </tr>
                     <tr>
-                        <td>L2: Cognitive Orchestrator</td>
-                        <td>AGENT SYNTHESIZER</td>
-                        <td>Autonomous multi-vector reconciliation & recursive truth verification.</td>
+                        <td data-label="LAYER">L2: Cognitive Orchestrator</td>
+                        <td data-label="COMPONENT">AGENT SYNTHESIZER</td>
+                        <td data-label="FUNCTION">Autonomous multi-vector reconciliation & recursive truth verification.</td>
                     </tr>
                     <tr>
-                        <td>L3: Risk metrology</td>
-                        <td>LOGIC SENTINEL</td>
-                        <td>Unit economics validation & fatal finding detection protocols.</td>
+                        <td data-label="LAYER">L3: Risk metrology</td>
+                        <td data-label="COMPONENT">LOGIC SENTINEL</td>
+                        <td data-label="FUNCTION">Unit economics validation & fatal finding detection protocols.</td>
                     </tr>
                     <tr>
-                        <td>L4: Forensic Terminal</td>
-                        <td>SOVEREIGN MANIFOLD</td>
-                        <td>High-fidelity visual synthesis of technical moats & leadership integrity.</td>
+                        <td data-label="LAYER">L4: Forensic Terminal</td>
+                        <td data-label="COMPONENT">SOVEREIGN MANIFOLD</td>
+                        <td data-label="FUNCTION">High-fidelity visual synthesis of technical moats & leadership integrity.</td>
                     </tr>
                 </tbody>
             </table>
@@ -846,7 +867,7 @@
                     <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000" alt="Sovereign Terminal" class="war-room-photo">
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--color-2); margin-bottom: 20px;">Forensic Audit 2026</h3>
+                    <h3 class="war-room-title">Forensic Audit 2026</h3>
                     <p class="lead-text">
                         Visualize the <strong>"Truth Synthesis"</strong> flow. OpenGravity V10 dismantles marketing narratives through deep multi-source scraping, 
                         analyzing everything from GitHub commits to technical forum sentiment in real-time.
