@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS | OpenGravity V10.7.0 Sovereign Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        html {
+            font-size: 18px;
+        }
+
+        :root {
+            --color-1: #060606; /* Deep Obsidian */
+            --color-2: #c9a96e; /* Institutional Gold */
+            --color-3: #121212; /* Mid-ground */
+            --color-4: #ffffff; /* Text */
+            --color-5: #1e1e1e; /* Glass */
+            --neon-blue: #00d4ff;
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-display: 'Bebas Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background: var(--color-1);
+            color: var(--color-4);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        h1 { font-family: var(--font-heading); font-size: 8rem; font-weight: 300; line-height: 0.95; }
+        h2.section-title { font-family: var(--font-heading); font-size: 4.5rem; margin-bottom: 70px; position: relative; }
+        h3, .subtitle { font-family: var(--font-display); font-size: 2.5rem; color: var(--color-2); letter-spacing: 2px; margin-bottom: 20px; }
+        .lead-text { font-family: var(--font-body); font-size: 1.6rem; font-weight: 300; line-height: 1.5; color: rgba(255,255,255,0.85); margin-bottom: 30px; text-transform: none; text-align: justify; }
+        p { font-family: var(--font-body); font-size: 1.3rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.7); text-align: justify; }
+        .small-text { font-size: 0.6rem; color: #555; opacity: 0.5; }
+        
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
+
+        .loader-logo {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: var(--color-2);
+            letter-spacing: 15px;
+            margin-bottom: 20px;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; filter: blur(2px); }
+            50% { opacity: 1; filter: blur(0px); }
+        }
+
+        /* Background Canvas */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(6,6,6,0.9), transparent);
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-2);
+            letter-spacing: 4px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-4);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-2);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+            position: relative;
+        }
+
+        .version-badge {
+            font-size: 1rem;
+            color: var(--color-2);
+            border: 1px solid var(--color-2);
+            padding: 8px 20px;
+            width: fit-content;
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+            font-family: var(--font-display);
+            background: rgba(201, 169, 110, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1, .hero p, .hero-stats, .version-badge {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 8rem;
+            font-weight: 300;
+            line-height: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: var(--color-2);
+            font-style: italic;
+        }
+
+        .hero p {
+            max-width: 900px;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 50px;
+            line-height: 1.3;
+            font-family: var(--font-display);
+            letter-spacing: 2px;
+            color: var(--color-2);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+            margin-top: 20px;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-family: var(--font-display);
+            color: var(--color-2);
+        }
+
+        .stat-item p {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Sections */
+        section {
+            padding: 15vh 10%;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 4.5rem;
+            margin-bottom: 70px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: var(--color-2);
+        }
+
+        /* Grid Layouts */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 4px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--color-2);
+            transform: translateY(-10px);
+        }
+
+        .glass-card h3 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-2);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glass-card p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.7);
+            position: relative;
+            z-index: 2;
+            text-align: justify;
+        }
+
+        /* Neon Icon Animation */
+        .neon-icon-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover .neon-icon-container {
+            opacity: 0.5;
+        }
+        .neon-icon {
+            width: 320px;
+            height: 320px;
+            filter: drop-shadow(0 0 5px var(--color-2));
+            transition: filter 1s ease;
+        }
+        .glass-card:hover .neon-icon {
+            filter: drop-shadow(0 0 20px var(--color-2));
+        }
+        .neon-icon path, .neon-icon circle, .neon-icon line {
+            fill: none;
+            stroke: var(--color-2);
+            stroke-width: 1.5;
+            stroke-dasharray: 120 400;
+            animation: neon-circulate 6s linear infinite;
+        }
+        @keyframes neon-circulate {
+            0% { stroke-dashoffset: 520; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* technical Table Styles */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            font-family: var(--font-body);
+        }
+
+        .tech-table th, .tech-table td {
+            text-align: left;
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s ease;
+        }
+
+        .tech-table tbody tr {
+            opacity: 0.2;
+            transform-origin: left center;
+            animation: tech-scan 10s infinite;
+        }
+
+        @keyframes tech-scan {
+            0%, 25%, 100% { opacity: 0.2; transform: scale(1); background: transparent; }
+            5%, 20% { 
+                opacity: 1; 
+                transform: scale(1.02) translateX(10px); 
+                background: rgba(201, 169, 110, 0.05);
+                box-shadow: inset 0 0 20px rgba(201, 169, 110, 0.1);
+            }
+        }
+
+        .tech-table tbody tr:nth-child(1) { animation-delay: 0s; }
+        .tech-table tbody tr:nth-child(2) { animation-delay: 2s; }
+        .tech-table tbody tr:nth-child(3) { animation-delay: 4s; }
+        .tech-table tbody tr:nth-child(4) { animation-delay: 6s; }
+        .tech-table tbody tr:nth-child(5) { animation-delay: 8s; }
+
+        .tech-table tbody tr:hover {
+            opacity: 1 !important;
+            animation-play-state: paused;
+            background: rgba(201, 169, 110, 0.1) !important;
+            transform: scale(1.02) translateX(10px) !important;
+        }
+
+        .tech-table th {
+            color: var(--color-2);
+            text-transform: uppercase;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+
+        /* Business Units Area */
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .plan-card {
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .plan-card:hover { border-color: var(--color-2); background: rgba(201,169,110,0.05); }
+
+        .plan-price { font-family: var(--font-display); font-size: 4rem; color: var(--color-2); margin: 25px 0; }
+
+        .plan-features { list-style: none; margin-bottom: 30px; flex-grow: 1; }
+
+        .plan-features li { margin-bottom: 15px; font-weight: 300; font-size: 1.3rem; color: #ddd; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px; }
+
+        /* Contact Form */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.02);
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 0;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 1.3rem;
+            margin-bottom: 35px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus { border-color: var(--color-2); }
+
+        .submit-btn {
+            background: var(--color-2);
+            color: var(--color-1);
+            border: none;
+            padding: 20px 60px;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover { letter-spacing: 5px; transform: scale(1.05); }
+
+        /* Footer */
+        footer {
+            padding: 100px 10%;
+            background: #000;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 100px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--color-2);
+            margin-bottom: 20px;
+        }
+
+        .footer-links h4 {
+            font-family: var(--font-display);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            color: #555;
+        }
+
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a {
+            text-decoration: none;
+            color: #888;
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--color-2); }
+
+        .copyright {
+            padding-top: 50px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* War Room Photo Interaction */
+        .war-room-photo {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            opacity: 0.5;
+            filter: grayscale(1) contrast(1.1) brightness(0.7);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .war-room-photo:hover {
+            opacity: 1;
+            filter: grayscale(0) contrast(1) brightness(1);
+            transform: scale(1.02);
+            border-color: var(--color-2);
+            box-shadow: 0 0 40px rgba(201, 169, 110, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 4rem; }
+            .contact-container { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 50px; }
+            nav { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-logo">AEGIS</div>
+        <p style="letter-spacing: 5px; font-size: 1rem; color: #888;">SYNCHRONIZING WITH OPENGRAVITY V10.7.0</p>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <nav>
+        <a href="#" class="logo">AEGIS</a>
+        <div class="nav-links">
+            <a href="#about">Metrology</a>
+            <a href="#specs">V10 Engine</a>
+            <a href="#plans">Investment Models</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="version-badge">FINANCIAL ORACLE V10.7.0 · SOVEREIGN EDITION</div>
+            <h1>Aesthetes of <span>Truth.</span></h1>
+            <div class="hero-diagram" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: 0.15; pointer-events: none; z-index: 0; overflow: hidden;">
+                <svg width="100%" height="100%" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Technical Grid -->
+                    <defs>
+                        <pattern id="gridLarge" width="100" height="100" patternUnits="userSpaceOnUse">
+                            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="var(--color-2)" stroke-width="1" opacity="0.2"/>
+                        </pattern>
+                        <pattern id="gridSmall" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--color-2)" stroke-width="0.5" opacity="0.1"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#gridLarge)" />
+                    <rect width="100%" height="100%" fill="url(#gridSmall)" />
+                    
+                    <!-- Bayesian Architecture -->
+                    <g opacity="0.8">
+                        <!-- Main Probability Manifold -->
+                        <path d="M100 700 Q 350 700 450 400 T 800 100 T 1150 400 T 1400 700" stroke="var(--color-2)" stroke-width="1" stroke-dasharray="20 10" />
+                        
+                        <!-- Sigma Bands -->
+                        <path d="M100 750 Q 350 750 450 450 T 800 150 T 1150 450 T 1400 750" stroke="var(--color-2)" stroke-width="0.5" opacity="0.3" />
+                        <path d="M100 650 Q 350 650 450 350 T 800 50 T 1150 350 T 1400 650" stroke="var(--color-2)" stroke-width="0.5" opacity="0.3" />
+
+                        <!-- Core Distribution (Posterior) -->
+                        <path d="M500 700 C 600 700 650 150 800 150 C 950 150 1000 700 1100 700" stroke="var(--color-2)" stroke-width="4" />
+                    </g>
+                    
+                    <!-- Schematic Labels (Diagrammed Orientation) -->
+                    <g font-family="var(--font-heading)" fill="var(--color-2)" font-size="10" letter-spacing="2">
+                        <text x="800" y="130" text-anchor="middle" font-weight="bold" font-size="14">POSTERIOR DENSITY PEAK (θ|D)</text>
+                        <line x1="800" y1="140" x2="800" y2="180" stroke="var(--color-2)" stroke-width="1" />
+                        
+                        <text x="500" y="680">INFERENCE ENGINE V10.7</text>
+                        <text x="1100" y="680" text-anchor="end">SIGNAL RECURSION: ACTIVE</text>
+                        
+                        <!-- Formula Block -->
+                        <rect x="50" y="50" width="300" height="80" stroke="var(--color-2)" stroke-width="1" fill="rgba(201,169,110,0.05)" />
+                        <text x="70" y="85" font-size="20" font-style="italic">P(θ|D) = [P(D|θ)P(θ)] / P(D)</text>
+                        <text x="70" y="110" font-size="10">BAYESIAN TRUTH SYNTHESIS MANIFOLD</text>
+                        
+                        <!-- Axes -->
+                        <line x1="100" y1="700" x2="1300" y2="700" stroke="var(--color-2)" stroke-width="2" />
+                        <line x1="100" y1="700" x2="100" y2="100" stroke="var(--color-2)" stroke-width="2" />
+                        <text x="1300" y="720" text-anchor="end">PARAMETER SPACE (θ)</text>
+                        <text x="80" y="120" transform="rotate(-90 80 120)" text-anchor="end">EVIDENCE MAGNITUDE</text>
+                    </g>
+
+                    <!-- Data Nodes (The Agents) -->
+                    <g fill="var(--color-2)">
+                        <circle cx="800" cy="150" r="6" />
+                        <circle cx="650" cy="350" r="4" opacity="0.6"/>
+                        <circle cx="950" cy="350" r="4" opacity="0.6"/>
+                        <path d="M650 350 L 800 150 L 950 350" stroke="var(--color-2)" stroke-width="1" stroke-dasharray="5 5" />
+                    </g>
+
+                    <!-- Scanning Identity -->
+                    <rect x="0" y="0" width="100%" height="1" fill="var(--color-2)" opacity="0.3">
+                        <animate attributeName="y" from="0" to="900" dur="15s" repeatCount="indefinite" />
+                    </rect>
+                </svg>
+            </div>
+            <p class="lead-text" style="color: var(--color-2); font-weight: 400;">
+                V10.7.0 operates as an institutional <strong>"Digital Dragnet,"</strong> integrating multi-vector signals into a raw, high-conviction investment thesis.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <h3>0.1499</h3>
+                    <p>Brier Score (Calibration)</p>
+                </div>
+                <div class="stat-item">
+                    <h3>1.2K+</h3>
+                    <p>Ground Truth Cases</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Cognitive Oracle</h3>
+                    <p>Protocol V10.7</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2 class="section-title">Bayesian Metrology</h2>
+            <div class="specs-grid">
+                <div class="glass-card">
+                    <div class="neon-icon-container">
+                        <svg class="neon-icon" viewBox="0 0 100 100">
+                            <path d="M 25 25 L 75 25 L 45 50 L 75 75 L 25 75 Z" />
+                        </svg>
+                    </div>
+                    <h3>Bayesian Logit Engine</h3>
+                    <p>
+                        Pure probability calculation through models parameterized with macro-structural factors (ZIRP, Region, Sector). 
+                        Institutional prior hardened to 20% for maximum technical skepticism.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <div class="neon-icon-container">
+                        <svg class="neon-icon" viewBox="0 0 100 100">
+                            <path d="M 30 70 L 70 70 M 50 70 L 50 30 M 20 45 L 50 30 L 80 45 M 15 45 A 5 5 0 1 1 25 45 M 75 45 A 5 5 0 1 1 85 45" />
+                        </svg>
+                    </div>
+                    <h3>Isotonic PAVA Calibration</h3>
+                    <p>
+                        Transformation of theoretical probabilities into empirical realities through Isotonic Regression (Pool-Adjacent-Violators Algorithm). 
+                        Total elimination of 0/1 binary collapse.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <div class="neon-icon-container">
+                        <svg class="neon-icon" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="10" />
+                            <path d="M 50 40 L 50 15 M 60 45 L 85 30 M 60 55 L 85 70 M 50 60 L 50 85 M 40 55 L 15 70 M 40 45 L 15 30" />
+                            <circle cx="50" cy="15" r="3" />
+                            <circle cx="85" cy="30" r="3" />
+                            <circle cx="85" cy="70" r="3" />
+                            <circle cx="50" cy="85" r="3" />
+                            <circle cx="15" cy="70" r="3" />
+                            <circle cx="15" cy="30" r="3" />
+                        </svg>
+                    </div>
+                    <h3>Monte Carlo Module</h3>
+                    <p>
+                        Execution of 1,000 perturbations per audit for uncertainty quantification. Automatic identification 
+                        of critical variance to trigger recursive agent cycles.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="specs">
+            <h2 class="section-title">OpenGravity Architecture</h2>
+            <p class="lead-text">
+                V10.7.0 operates as an institutional "Digital Dragnet," integrating multi-vector signals into a raw, high-conviction investment thesis.
+            </p>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Component</th>
+                        <th>Critical Function</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>L0: Signal Extraction</td>
+                        <td>NEURAL HARVESTER</td>
+                        <td>Real-time multi-vector signal excavation & raw data ingestion.</td>
+                    </tr>
+                    <tr>
+                        <td>L1: Probabilistic Engine</td>
+                        <td>BAYESIAN PROCESSOR</td>
+                        <td>Logit manifold mapping → Isotonic calibration (Brier 0.1499).</td>
+                    </tr>
+                    <tr>
+                        <td>L2: Cognitive Orchestrator</td>
+                        <td>AGENT SYNTHESIZER</td>
+                        <td>Autonomous multi-vector reconciliation & recursive truth verification.</td>
+                    </tr>
+                    <tr>
+                        <td>L3: Risk metrology</td>
+                        <td>LOGIC SENTINEL</td>
+                        <td>Unit economics validation & fatal finding detection protocols.</td>
+                    </tr>
+                    <tr>
+                        <td>L4: Forensic Terminal</td>
+                        <td>SOVEREIGN MANIFOLD</td>
+                        <td>High-fidelity visual synthesis of technical moats & leadership integrity.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="plans">
+            <h2 class="section-title">Investment Models</h2>
+            <div class="plans-container">
+                <div class="plan-card">
+                    <h3>SENTINEL</h3>
+                    <p>Compliance Base</p>
+                    <div class="plan-price">$2,500<span>/mo</span></div>
+                    <ul class="plan-features">
+                        <li>5 Monthly Audits</li>
+                        <li>Standard Logit Engine</li>
+                        <li>Structured PDF Reports</li>
+                        <li>Ticket Support</li>
+                    </ul>
+                    <a href="#contact" style="color: var(--color-2); text-decoration: none; font-family: var(--font-display);">ACQUIRE SENTINEL</a>
+                </div>
+                <div class="plan-card" style="border-color: var(--color-2); background: rgba(201,169,110,0.05);">
+                    <h3>TITAN</h3>
+                    <p>Truth Synthesis Full</p>
+                    <div class="plan-price">$8,500<span>/mo</span></div>
+                    <ul class="plan-features">
+                        <li>25 Monthly Audits</li>
+                        <li>DeepSeek-V3 Forensic AI</li>
+                        <li>Live War Room Access</li>
+                        <li>Immutable Hash Certificates</li>
+                        <li>24/7 Premium Support</li>
+                    </ul>
+                    <a href="#contact" style="background: var(--color-2); color: #000; padding: 12px; text-align: center; text-decoration: none; font-family: var(--font-display);">MOST POPULAR</a>
+                </div>
+                <div class="plan-card">
+                    <h3>HYDRA</h3>
+                    <p>On-Premise Sovereignty</p>
+                    <div class="plan-price">UNDER QUOTE</div>
+                    <ul class="plan-features">
+                        <li>Unlimited Audits</li>
+                        <li>Private Cloud Deployment</li>
+                        <li>Proprietary Data Integration</li>
+                        <li>Custom Policy Weights</li>
+                        <li>99.9% Industrial SLA</li>
+                    </ul>
+                    <a href="#contact" style="color: var(--color-2); text-decoration: none; font-family: var(--font-display);">CONTACT SALES</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="war-room">
+            <h2 class="section-title">War Room Live</h2>
+            <div class="contact-container">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000" alt="Sovereign Terminal" class="war-room-photo">
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <h3 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--color-2); margin-bottom: 20px;">Forensic Audit 2026</h3>
+                    <p class="lead-text">
+                        Visualize the <strong>"Truth Synthesis"</strong> flow. OpenGravity V10 dismantles marketing narratives through deep multi-source scraping, 
+                        analyzing everything from GitHub commits to technical forum sentiment in real-time.
+                    </p>
+                    <ul style="list-style: none; font-weight: 300; font-size: 1.3rem; color: var(--color-2);">
+                        <li style="margin-bottom: 15px;">⚡ Automated "Brutal Facts" extraction engine.</li>
+                        <li style="margin-bottom: 15px;">⚡ Core leadership & founder background integrity validation.</li>
+                        <li style="margin-bottom: 15px;">⚡ Real-time technical moat verification protocol.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="contact-container">
+                <div>
+                    <h2 class="section-title">Request Audit</h2>
+                    <p class="lead-text">
+                        AEGIS is the institutional interface of AliceLabs. For sovereign deployments or v10.7.0 access, please complete the credentials form.
+                    </p>
+                </div>
+                <form id="contact-form">
+                    <input type="text" placeholder="ENTITY / FUND" required>
+                    <input type="email" placeholder="AUDITOR EMAIL" required>
+                    <textarea placeholder="PROJECT SCOPE OR AUDIT VOLUME" rows="5" required></textarea>
+                    <button type="submit" class="submit-btn" id="submit-btn">SUBMIT CREDENTIALS</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo">ALICELABS</div>
+                <p style="color: #aaa; font-weight: 300; font-size: 1.3rem; max-width: 500px;">
+                    Sovereign Infrastructure Division. <br>
+                    Leading risk metrology for a truthful and immutable financial future.
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>PRODUCT</h4>
+                <ul>
+                    <li><a href="#">OpenGravity V10.7.0</a></li>
+                    <li><a href="#">Sovereign Hub</a></li>
+                    <li><a href="#">War Room Access</a></li>
+                    <li><a href="#">Audit API</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>POLICIES</h4>
+                <ul>
+                    <li><a href="#">Data Privacy</a></li>
+                    <li><a href="#">Audit Confidentiality</a></li>
+                    <li><a href="#">Legal Terms</a></li>
+                    <li><a href="#">Oracle SLA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright small-text">
+            <p>&copy; 2026 ALICELABS. ALL RIGHTS RESERVED.</p>
+            <p>DESIGNED BY ALICELABS SOVEREIGN DIVISION</p>
+        </div>
+    </footer>
+
+    <script>
+        // Three.js Background Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        for (let i = 0; i < 8000; i++) {
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        
+        const material = new THREE.PointsMaterial({ color: 0xc9a96e, size: 2, transparent: true, opacity: 0.8 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        camera.position.z = 1000;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.x += 0.0005;
+            points.rotation.y += 0.0007;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 1000);
+            }, 1200);
+        });
+
+        // Form Animation
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.innerHTML = "PROCESSING HASH...";
+            btn.style.background = "#444";
+            setTimeout(() => {
+                btn.innerHTML = "ACCESS GRANTED";
+                btn.style.background = "#c9a96e";
+                alert("Access protocol initiated. AliceLabs Sovereign Division will validate your entity credentials.");
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
