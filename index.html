@@ -538,28 +538,54 @@
         }
 
         @media (max-width: 768px) {
-            html { font-size: 16px; }
-            .hero { padding: 0 5%; justify-content: flex-end; padding-bottom: 10vh; }
-            .hero h1 { font-size: 2.8rem; }
-            .hero p { font-size: 1.1rem; margin-bottom: 30px; }
-            .lead-text { font-size: 1.1rem; }
-            .hero-stats { flex-direction: column; gap: 20px; }
-            .stat-item h3 { font-size: 2rem; }
-            .section-title { font-size: 2.2rem; margin-bottom: 40px; }
-            .contact-container { grid-template-columns: 1fr; gap: 40px; }
-            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-            .specs-grid { grid-template-columns: 1fr; }
-            .plans-container { grid-template-columns: 1fr; }
-            nav { padding: 20px; }
-            .logo { font-size: 1.8rem; }
-            .nav-links { display: none; } /* Hide complex nav on mobile for simplicity */
-            
-            #truth-synthesis-stream {
-                width: 90%;
-                top: 50px;
-                right: 5%;
-                font-size: 0.6rem;
+            html, body { overflow-x: hidden; width: 100%; }
+            .hero { 
+                padding: 120px 20px 60px 20px; 
+                justify-content: flex-start;
+                min-height: auto;
             }
+            .hero h1 { font-size: 2.2rem; transform: none !important; margin-bottom: 20px; }
+            .hero p { font-size: 1rem; margin-bottom: 30px; max-width: 100%; text-align: left; }
+            .lead-text { font-size: 1rem; }
+            .hero-stats { 
+                flex-direction: column; 
+                gap: 20px; 
+                align-items: flex-start;
+                margin-top: 40px;
+                padding-left: 10px;
+                border-left: 1px solid var(--color-2);
+            }
+            .stat-item h3 { font-size: 1.4rem; color: var(--color-2); }
+            .stat-item p { font-size: 0.65rem; opacity: 0.7; }
+            
+            .section-title { font-size: 1.8rem; margin-bottom: 30px; text-align: left; }
+            .section { padding: 60px 20px; }
+            
+            .specs-grid, .plans-container, .contact-container, .footer-grid { 
+                grid-template-columns: 1fr; 
+                gap: 30px; 
+            }
+            
+            nav { padding: 15px 20px; }
+            .logo { font-size: 1.5rem; }
+            .nav-links { display: none; }
+            
+            #truth-synthesis-stream { display: none; }
+            .hero-diagram { height: 50% !important; bottom: 0; top: auto !important; opacity: 0.1 !important; }
+            
+            .version-badge { font-size: 0.55rem; padding: 4px 8px; }
+            
+            /* Architecture Table Mobile */
+            .arch-table tr { 
+                display: flex; 
+                flex-direction: column; 
+                padding: 20px 0;
+                border-bottom: 1px solid rgba(201,169,110,0.1);
+            }
+            .arch-table td { padding: 5px 0 !important; }
+            .level-code { font-size: 0.7rem; margin-bottom: 5px; }
+            .component-name { font-size: 1rem; margin-bottom: 5px; }
+            .component-desc { font-size: 0.8rem; opacity: 0.8; }
         }
     </style>
 </head>
