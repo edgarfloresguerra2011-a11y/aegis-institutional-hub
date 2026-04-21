@@ -132,11 +132,11 @@
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 0 10%;
+            justify-content: flex-start;
+            padding: 180px 10% 100px 10%;
             position: relative;
         }
 
@@ -469,7 +469,7 @@
 
         .footer-logo {
             font-family: var(--font-display);
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             color: var(--color-2);
             margin-bottom: 20px;
         }
@@ -479,6 +479,7 @@
             margin-bottom: 25px;
             letter-spacing: 2px;
             color: #555;
+            font-size: 0.8rem;
         }
 
         .footer-links ul { list-style: none; }
@@ -486,7 +487,7 @@
         .footer-links a {
             text-decoration: none;
             color: #888;
-            font-size: 1.3rem;
+            font-size: 0.95rem;
             transition: color 0.3s;
         }
         .footer-links a:hover { color: var(--color-2); }
@@ -582,7 +583,7 @@
             h1 span, h2 span { display: inline !important; }
 
             .hero { 
-                padding: 100px 20px 40px 20px !important; 
+                padding: 160px 20px 60px 20px !important; 
                 justify-content: flex-start !important;
                 min-height: auto !important;
                 height: auto !important;
@@ -719,7 +720,7 @@
                     
                     <!-- Schematic Labels -->
                     <g font-family="var(--font-heading)" fill="var(--color-2)" font-size="10" letter-spacing="2">
-                        <text x="800" y="110" text-anchor="middle" font-weight="bold" font-size="14" class="posterior-peak">POSTERIOR DENSITY PEAK (θ|D)</text>
+                        
                         
                         <rect x="1050" y="750" width="300" height="80" stroke="var(--color-2)" stroke-width="1" fill="rgba(201,169,110,0.05)" class="formula-container" />
                         <text x="1070" y="785" font-size="20" font-style="italic">P(θ|D) = [P(D|θ)P(θ)] / P(D)</text>
@@ -961,7 +962,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-logo">ALICELABS</div>
-                <p style="color: #aaa; font-weight: 300; font-size: 1.3rem; max-width: 500px;">
+                <p style="color: #aaa; font-weight: 300; font-size: 0.95rem; max-width: 500px;">
                     Sovereign Infrastructure Division. <br>
                     Leading risk metrology for a truthful and immutable financial future.
                 </p>
