@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AEGIS | OpenGravity V10.7.0 Sovereign Hub</title>
+    <title>PREDDICTO | V10.7.0 Sovereign Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
@@ -44,8 +44,11 @@
         h1 { font-family: var(--font-heading); font-size: 8rem; font-weight: 300; line-height: 0.95; }
         h2.section-title { font-family: var(--font-heading); font-size: 4.5rem; margin-bottom: 70px; position: relative; }
         h3, .subtitle { font-family: var(--font-display); font-size: 2.5rem; color: var(--color-2); letter-spacing: 2px; margin-bottom: 20px; }
-        .lead-text { font-family: var(--font-body); font-size: 1.6rem; font-weight: 300; line-height: 1.5; color: rgba(255,255,255,0.85); margin-bottom: 30px; text-transform: none; text-align: justify; }
-        p { font-family: var(--font-body); font-size: 1.3rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.7); text-align: justify; }
+        .lead-text { font-family: var(--font-body); font-size: 1.6rem; font-weight: 300; line-height: 1.5; color: rgba(255,255,255,0.85); margin-bottom: 30px; text-transform: none; }
+        p { font-family: var(--font-body); font-size: 1.3rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.7); }
+        
+        /* Global Text Justification Override */
+        p, li, td, .lead-text, .plan-features li, .tech-table td:nth-child(3) { text-align: justify !important; }
         .small-text { font-size: 0.6rem; color: #555; opacity: 0.5; }
         
         /* Loading Screen */
@@ -402,6 +405,57 @@
 
         .plan-features li { margin-bottom: 15px; font-weight: 300; font-size: 1.3rem; color: #ddd; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px; }
 
+        .plan-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid var(--color-2);
+            color: var(--color-2);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .plan-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--color-2);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: -1;
+        }
+
+        .plan-btn:hover {
+            color: #000;
+        }
+
+        .plan-btn:hover::before {
+            left: 0;
+        }
+
+        .plan-card.popular .plan-btn {
+            background: var(--color-2);
+            color: #000;
+        }
+
+        .plan-card.popular .plan-btn:hover {
+            background: #fff;
+            border-color: #fff;
+            color: #000;
+        }
+
         /* Contact Form */
         .contact-container {
             display: grid;
@@ -510,24 +564,42 @@
             opacity: 1;
         }
 
+        /* Global Entrance Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* War Room Photo Interaction */
         .war-room-photo {
             width: 100%;
             height: auto;
             border-radius: 4px;
-            opacity: 0.8;
-            filter: contrast(1.1) brightness(0.7) sepia(0.2);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(201, 169, 110, 0.2);
-            box-shadow: 0 0 20px rgba(201, 169, 110, 0.1);
+            opacity: 0.2;
+            filter: grayscale(1) brightness(0.5) blur(2px);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .war-room-photo.visible {
+            opacity: 1;
+            filter: grayscale(0) brightness(1) blur(0px) contrast(1.1);
+            border-color: rgba(201, 169, 110, 0.3);
+            box-shadow: 0 0 30px rgba(201, 169, 110, 0.2);
         }
 
         .war-room-photo:hover {
-            opacity: 1;
-            filter: contrast(1.1) brightness(1) sepia(0);
-            transform: scale(1.02);
+            transform: scale(1.01);
+            filter: brightness(1.2) contrast(1.2);
             border-color: var(--color-2);
-            box-shadow: 0 0 40px rgba(201, 169, 110, 0.3);
+            box-shadow: 0 0 50px rgba(201, 169, 110, 0.4);
         }
 
         /* Hero Signal Particles */
@@ -594,11 +666,11 @@
                 min-height: auto !important;
                 height: auto !important;
             }
-            .hero p, .lead-text, .section p, .glass-card p { 
+            .hero p, .lead-text, .section p, .glass-card p, .plan-card p, .plan-features li, li { 
                 font-size: 0.95rem !important; 
                 margin-bottom: 20px !important; 
                 max-width: 100% !important; 
-                text-align: left !important; 
+                text-align: justify !important; 
                 line-height: 1.6 !important;
             }
             
@@ -619,7 +691,7 @@
             
             .specs-grid, .plans-container, .contact-container, .footer-grid { 
                 grid-template-columns: 1fr !important; 
-                gap: 20px !important; 
+                gap: 10px !important; 
                 display: grid !important;
             }
             
@@ -639,17 +711,23 @@
             }
             .tech-table thead { display: none !important; }
             .tech-table tr { 
-                margin-bottom: 20px !important; 
-                border: 1px solid rgba(201,169,110,0.1) !important; 
-                padding: 15px !important;
-                background: rgba(255,255,255,0.02) !important;
-                transform: none !important;
-                opacity: 1 !important;
-                animation: none !important;
+                margin-bottom: 25px !important; 
+                border: 1.5px solid rgba(201,169,110,0.5) !important; 
+                padding: 18px !important;
+                background: rgba(255,255,255,0.1) !important;
+                transition: all 0.4s ease-out !important;
+                transform: scale(0.97);
+            }
+            .tech-table tr.visible {
+                transform: scale(1) !important;
+                border: 1.5px solid #c9a96e !important;
+                background: rgba(201,169,110,0.15) !important;
+                box-shadow: 0 0 25px rgba(201,169,110,0.9), 
+                            0 0 50px rgba(201,169,110,0.3) !important;
             }
             .tech-table td { 
                 padding: 8px 0 !important; 
-                text-align: left !important;
+                text-align: justify !important;
                 border: none !important;
             }
             .tech-table td:before {
@@ -663,21 +741,185 @@
             }
 
             /* Component Styling in Mobile View */
-            .tech-table td:nth-child(1) { font-family: var(--font-display); font-size: 0.9rem; color: var(--color-2); border-bottom: 1px solid rgba(255,255,255,0.05) !important; margin-bottom: 10px; padding-bottom: 10px !important; }
-            .tech-table td:nth-child(2) { font-family: var(--font-display); font-size: 1.1rem; color: #fff; }
-            .tech-table td:nth-child(3) { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
+            .tech-table td:nth-child(1) { font-family: var(--font-display); font-size: 1.0rem; color: var(--color-2); border-bottom: 1px solid rgba(255,255,255,0.05) !important; margin-bottom: 10px; padding-bottom: 10px !important; }
+            .tech-table td:nth-child(2) { font-family: var(--font-display); font-size: 1.15rem; color: #fff; }
+            .tech-table td:nth-child(3) { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.4; }
 
             /* Card Adjustments */
-            .plan-card .neon-icon-container { display: none !important; }
-            .glass-card, .plan-card { padding: 18px !important; gap: 10px !important; }
-            h3, .glass-card h3, .plan-card h3, .war-room-title { font-size: 1.25rem !important; margin-bottom: 5px !important; }
-            .plan-price { font-size: 1.8rem !important; margin: 10px 0 !important; }
-            .plan-features li { font-size: 0.85rem !important; margin-bottom: 6px !important; padding-bottom: 6px !important; }
-            .submit-btn { width: 100% !important; padding: 15px !important; font-size: 1.1rem !important; }
+            .glass-card .neon-icon-container, .plan-card .neon-icon-container { display: none !important; }
+            .glass-card, .plan-card { 
+                padding: 15px !important; 
+                gap: 5px !important; 
+                border: 1px solid rgba(255,255,255,0.1) !important;
+                background: rgba(255,255,255,0.03) !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            h3, .glass-card h3, .plan-card h3, .war-room-title { font-size: 1.15rem !important; margin-bottom: 5px !important; }
+            .plan-price { font-size: 1.25rem !important; margin: 5px 0 !important; }
+            .glass-card p, .plan-card p { font-size: 0.9rem !important; margin-bottom: 5px !important; line-height: 1.4 !important; }
+            .plan-features li { font-size: 0.85rem !important; margin-bottom: 4px !important; padding-bottom: 4px !important; }
+            .plan-card a { font-size: 0.9rem !important; padding: 10px !important; display: block; border: 1px solid var(--color-2) !important; color: var(--color-2) !important; text-decoration: none; }
+            .submit-btn { width: 100% !important; padding: 12px !important; font-size: 0.95rem !important; margin-top: 10px !important; }
+            .plan-features { margin-bottom: 10px !important;}
             
-            .war-room-photo { margin-bottom: 30px !important; }
+            .war-room-photo { margin-bottom: 15px !important; }
             
-            .copyright { flex-direction: column !important; gap: 10px !important; text-align: center !important; }
+            .copyright { flex-direction: column !important; gap: 5px !important; text-align: center !important; }
+
+            /* Mobile Specialized Animation Override */
+            .fade-in {
+                transform: scale(0.95);
+                opacity: 0;
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out !important;
+            }
+            .fade-in.visible {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            /* Background blur when chat is active on mobile */
+            body.chat-open main, 
+            body.chat-open nav, 
+            body.chat-open footer, 
+            body.chat-open #canvas-container {
+                filter: blur(10px);
+                transition: filter 0.5s ease;
+                pointer-events: none;
+            }
+        }
+
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background: var(--color-1);
+            border: 1px solid var(--color-2);
+            padding: 60px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 50px rgba(201,169,110,0.2);
+            margin: 20px;
+        }
+
+        .modal-content h2 { font-family: var(--font-display); font-size: 3rem; color: var(--color-2); margin-bottom: 20px; text-transform: uppercase; }
+        .modal-content p { color: #fff; font-size: 1.2rem; margin-bottom: 30px; font-weight: 300; }
+        .modal-close {
+            background: var(--color-2);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-family: var(--font-display);
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .modal-close:hover { background: #fff; }
+
+        /* Floating Chat Agent */
+        #chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .chat-toggle {
+            width: 70px;
+            height: 70px;
+            background: var(--color-2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+
+        .chat-toggle:hover { transform: scale(1.1); box-shadow: 0 15px 40px rgba(201,169,110,0.4); }
+
+        .chat-window {
+            position: absolute;
+            bottom: 90px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid var(--color-2);
+            backdrop-filter: blur(20px);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
+        .chat-header {
+            background: var(--color-2);
+            color: #000;
+            padding: 15px;
+            font-family: var(--font-display);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg { padding: 12px 18px; border-radius: 4px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; }
+        .msg.agent { background: rgba(201,169,110,0.1); border: 1px solid var(--color-2); align-self: flex-start; color: #fff; }
+        .msg.user { background: rgba(255,255,255,0.05); align-self: flex-end; color: #aaa; text-align: right; }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            padding: 5px;
+            border-bottom: 0px !important; /* Resetting global input style */
+        }
+
+        .chat-input-area button {
+            background: transparent;
+            border: none;
+            color: var(--color-2);
+            cursor: pointer;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
         }
 
     </style>
@@ -685,14 +927,14 @@
 <body>
 
     <div id="loader">
-        <div class="loader-logo">AEGIS</div>
-        <p style="letter-spacing: 5px; font-size: 1rem; color: #888;">SYNCHRONIZING WITH OPENGRAVITY V10.7.0</p>
+        <div class="loader-logo">PREDDICTO</div>
+        <p style="letter-spacing: 5px; font-size: 1rem; color: #888;">SYNCHRONIZING WITH PREDDICTO V10.7.0</p>
     </div>
 
     <div id="canvas-container"></div>
 
     <nav>
-        <a href="#" class="logo">AEGIS</a>
+        <a href="#" class="logo">PREDDICTO</a>
         <div class="nav-links">
             <a href="#about">Metrology</a>
             <a href="#specs">V10 Engine</a>
@@ -813,7 +1055,7 @@
         </section>
 
         <section id="specs">
-            <h2 class="section-title">OpenGravity Architecture</h2>
+            <h2 class="section-title">Preddicto Architecture</h2>
             <p class="lead-text">
                 V10.7.0 operates as an institutional "Digital Dragnet," integrating multi-vector signals into a raw, high-conviction investment thesis.
             </p>
@@ -874,9 +1116,9 @@
                         <li>Structured PDF Reports</li>
                         <li>Ticket Support</li>
                     </ul>
-                    <a href="#contact" style="color: var(--color-2); text-decoration: none; font-family: var(--font-display); position: relative; z-index: 5;">ACQUIRE SENTINEL</a>
+                    <a href="#contact" class="plan-btn">ACQUIRE SENTINEL</a>
                 </div>
-                <div class="plan-card" style="border-color: var(--color-2); background: rgba(201,169,110,0.05);">
+                <div class="plan-card popular" style="border-color: var(--color-2); background: rgba(201,169,110,0.05);">
                     <div class="neon-icon-container">
                         <svg class="neon-icon" viewBox="0 0 100 100">
                             <rect x="25" y="25" width="50" height="50" rx="2" />
@@ -893,7 +1135,7 @@
                         <li>Immutable Hash Certificates</li>
                         <li>24/7 Premium Support</li>
                     </ul>
-                    <a href="#contact" style="background: var(--color-2); color: #000; padding: 12px; text-align: center; text-decoration: none; font-family: var(--font-display); position: relative; z-index: 5;">MOST POPULAR</a>
+                    <a href="#contact" class="plan-btn">ACQUIRE TITAN</a>
                 </div>
                 <div class="plan-card">
                     <div class="neon-icon-container">
@@ -912,7 +1154,7 @@
                         <li>Custom Policy Weights</li>
                         <li>99.9% Industrial SLA</li>
                     </ul>
-                    <a href="#contact" style="color: var(--color-2); text-decoration: none; font-family: var(--font-display); position: relative; z-index: 5;">CONTACT SALES</a>
+                    <a href="#contact" class="plan-btn">CONTACT SALES</a>
                 </div>
             </div>
         </section>
@@ -924,15 +1166,21 @@
                     <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000" alt="Sovereign Terminal" class="war-room-photo">
                 </div>
                 <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <h3 class="war-room-title">Forensic Audit 2026</h3>
-                    <p class="lead-text">
-                        Visualize the <strong>"Truth Synthesis"</strong> flow. OpenGravity V10 dismantles marketing narratives through deep multi-source scraping, 
+                    <h3 class="war-room-title fade-in">Forensic Audit 2026</h3>
+                    <p class="lead-text fade-in">
+                        Visualize the <strong>"Truth Synthesis"</strong> flow. PREDDICTO V10 dismantles marketing narratives through deep multi-source scraping, 
                         analyzing everything from GitHub commits to technical forum sentiment in real-time.
                     </p>
-                    <ul style="list-style: none; font-weight: 300; font-size: 1.3rem; color: var(--color-2);">
-                        <li style="margin-bottom: 15px;">⚡ Automated "Brutal Facts" extraction engine.</li>
-                        <li style="margin-bottom: 15px;">⚡ Core leadership & founder background integrity validation.</li>
-                        <li style="margin-bottom: 15px;">⚡ Real-time technical moat verification protocol.</li>
+                    <ul style="list-style: none; font-weight: 300; font-size: 1.1rem; color: #fff;">
+                        <li class="fade-in" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: flex-start;">
+                            <span style="color: var(--color-2);">⚡</span> Automated "Brutal Facts" extraction engine.
+                        </li>
+                        <li class="fade-in" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: flex-start;">
+                            <span style="color: var(--color-2);">⚡</span> Core leadership & founder background integrity validation.
+                        </li>
+                        <li class="fade-in" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: flex-start;">
+                            <span style="color: var(--color-2);">⚡</span> Real-time technical moat verification protocol.
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -943,7 +1191,7 @@
                 <div>
                     <h2 class="section-title">Request Audit</h2>
                     <p class="lead-text">
-                        AEGIS is the institutional interface of AliceLabs. For sovereign deployments or v10.7.0 access, please complete the credentials form.
+                        PREDDICTO is the institutional interface of AliceLabs. For sovereign deployments or v10.7.0 access, please complete the credentials form.
                     </p>
                 </div>
                 <form id="contact-form">
@@ -977,7 +1225,7 @@
             <div class="footer-links">
                 <h4>PRODUCT</h4>
                 <ul>
-                    <li><a href="#">OpenGravity V10.7.0</a></li>
+                    <li><a href="#">PREDDICTO V10.7.0</a></li>
                     <li><a href="#">Sovereign Hub</a></li>
                     <li><a href="#">War Room Access</a></li>
                     <li><a href="#">Audit API</a></li>
@@ -998,6 +1246,37 @@
             <p>DESIGNED BY ALICELABS SOVEREIGN DIVISION</p>
         </div>
     </footer>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal-content">
+            <h2>PROTOCOL INITIATED</h2>
+            <p>Your credentials have been securely transmitted to the Sovereign Audit Division at support@alicelabs.site. Our forensic agents will analyze your request and contact you within 24 standard cycles.</p>
+            <button class="modal-close" onclick="closeModal()">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <!-- Floating Chat Agent -->
+    <div id="chat-widget">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <span>ALICE</span>
+                <span style="cursor:pointer" onclick="toggleChat()">✕</span>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="msg agent">Hola soy Alice, en qué te ayudo?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button style="background:transparent; border:none; color:var(--color-2); cursor:pointer; font-family:var(--font-display);" onclick="sendMessage()">SEND</button>
+            </div>
+        </div>
+        <div class="chat-toggle" onclick="toggleChat()">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </div>
+    </div>
 
     <script>
         // Three.js Background Animation
@@ -1089,6 +1368,89 @@
         }
         animate();
 
+        // Form Submission Logic
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "TRANSMITTING...";
+            btn.disabled = true;
+
+            // Simulate server lag
+            setTimeout(() => {
+                document.getElementById('success-modal').style.display = 'flex';
+                btn.innerText = originalText;
+                btn.disabled = false;
+                this.reset();
+            }, 1500);
+        });
+
+        function closeModal() {
+            document.getElementById('success-modal').style.display = 'none';
+        }
+
+        // Chat Logic
+        function toggleChat() {
+            const win = document.getElementById('chat-window');
+            const isOpen = win.style.display === 'flex';
+            win.style.display = isOpen ? 'none' : 'flex';
+            
+            // Apply blur class on mobile
+            if (window.innerWidth <= 768) {
+                if (!isOpen) {
+                    document.body.classList.add('chat-open');
+                } else {
+                    document.body.classList.remove('chat-open');
+                }
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+
+            // Enter key listener
+            input.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Placeholder for typing state
+            const typingMsg = document.createElement('div');
+            typingMsg.className = 'msg agent';
+            typingMsg.innerText = "...";
+            const container = document.getElementById('chat-messages');
+            container.appendChild(typingMsg);
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                typingMsg.innerText = data.reply;
+            } catch (error) {
+                typingMsg.innerText = "Connection lost. Re-establishing link...";
+            }
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addMessage(text, side) {
+            const msg = document.createElement('div');
+            msg.className = `msg ${side}`;
+            msg.innerText = text;
+            const container = document.getElementById('chat-messages');
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+        }
+
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -1101,6 +1463,10 @@
                 document.getElementById('loader').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('loader').style.display = 'none';
+                    // Reveal the chat widget once the presentation is over
+                    const chatWidget = document.getElementById('chat-widget');
+                    chatWidget.style.opacity = '1';
+                    chatWidget.style.pointerEvents = 'auto';
                 }, 1000);
             }, 1200);
         });
@@ -1122,22 +1488,10 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.glass-card, .plan-card, .tech-table tr, .section-title, .war-room-photo').forEach(el => {
+        document.querySelectorAll('.glass-card, .plan-card, .tech-table tr, .section-title, .war-room-photo, .fade-in').forEach(el => {
             revealObserver.observe(el);
         });
 
-        // Form Animation
-        document.getElementById('contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.innerHTML = "PROCESSING HASH...";
-            btn.style.background = "#444";
-            setTimeout(() => {
-                btn.innerHTML = "ACCESS GRANTED";
-                btn.style.background = "#c9a96e";
-                alert("Access protocol initiated. AliceLabs Sovereign Division will validate your entity credentials.");
-            }, 1500);
-        });
     </script>
 </body>
 </html>

@@ -1,11 +1,11 @@
-# AEGIS Operational Intelligence Hub
-## Powered by OpenGravity V10.7.0 Sovereign Engine
+# PREDDICTO Operational Intelligence Hub
+## Powered by PREDDICTO V10.7.0 Sovereign Engine
 
 ### Overview
-AEGIS is the flagship institutional interface for the **OpenGravity V10** infrastructure. It serves as a centralized "Financial Oracle" and metrology hub, designed to provide high-conviction survival probability metrics for institutional entities and venture investments.
+PREDDICTO is the flagship institutional interface for the **PREDDICTO V10** infrastructure. It serves as a centralized "Financial Oracle" and metrology hub, designed to provide high-conviction survival probability metrics for institutional entities and venture investments.
 
 ### Core Philosophy: The Metrology of Truth
-In an era of narrative-driven markets, AEGIS employs **Bayesian Metrology** to dismantle marketing facades and reveal empirical "Brutal Facts." The system ignores qualitative sentiment in favor of recursive forensic analysis and macro-parameterized logit models.
+In an era of narrative-driven markets, PREDDICTO employs **Bayesian Metrology** to dismantle marketing facades and reveal empirical "Brutal Facts." The system ignores qualitative sentiment in favor of recursive forensic analysis and macro-parameterized logit models.
 
 ### Technical Architecture
 - **Inference Engine (V10.7.0):** Uses Bayesian logic to calculate posterior probabilities $P(\theta|D)$ based on multi-vector signals.
