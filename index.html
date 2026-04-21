@@ -498,6 +498,45 @@
             box-shadow: 0 0 40px rgba(201, 169, 110, 0.2);
         }
 
+        /* Hero Signal Particles */
+        .signal-particle {
+            fill: var(--color-2);
+            filter: blur(1px);
+        }
+
+        .formula-container {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-formula 4s forwards ease-in-out;
+        }
+
+        @keyframes draw-formula {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .posterior-peak {
+            animation: peak-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes peak-glow {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px var(--color-2)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 20px var(--color-2)); }
+        }
+
+        #truth-synthesis-stream {
+            position: absolute;
+            right: 5%;
+            top: 25%;
+            width: 300px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            color: var(--color-2);
+            opacity: 0.4;
+            pointer-events: none;
+            overflow: hidden;
+            height: 150px;
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 4rem; }
             .contact-container { grid-template-columns: 1fr; }
@@ -545,44 +584,21 @@
                     
                     <!-- Bayesian Architecture -->
                     <g opacity="0.8">
-                        <!-- Main Probability Manifold -->
-                        <path d="M100 700 Q 350 700 450 400 T 800 100 T 1150 400 T 1400 700" stroke="var(--color-2)" stroke-width="1" stroke-dasharray="20 10" />
-                        
-                        <!-- Sigma Bands -->
-                        <path d="M100 750 Q 350 750 450 450 T 800 150 T 1150 450 T 1400 750" stroke="var(--color-2)" stroke-width="0.5" opacity="0.3" />
-                        <path d="M100 650 Q 350 650 450 350 T 800 50 T 1150 350 T 1400 650" stroke="var(--color-2)" stroke-width="0.5" opacity="0.3" />
-
-                        <!-- Core Distribution (Posterior) -->
-                        <path d="M500 700 C 600 700 650 150 800 150 C 950 150 1000 700 1100 700" stroke="var(--color-2)" stroke-width="4" />
+                        <path d="M100 700 Q 350 700 450 400 T 800 150 T 1150 400 T 1400 700" stroke="var(--color-2)" stroke-width="1.5" stroke-dasharray="20 10" class="formula-container" />
+                        <path d="M500 700 C 600 700 650 150 800 150 C 950 150 1000 700 1100 700" stroke="var(--color-2)" stroke-width="4" class="posterior-peak" />
                     </g>
                     
-                    <!-- Schematic Labels (Diagrammed Orientation) -->
+                    <!-- Schematic Labels -->
                     <g font-family="var(--font-heading)" fill="var(--color-2)" font-size="10" letter-spacing="2">
-                        <text x="800" y="130" text-anchor="middle" font-weight="bold" font-size="14">POSTERIOR DENSITY PEAK (θ|D)</text>
-                        <line x1="800" y1="140" x2="800" y2="180" stroke="var(--color-2)" stroke-width="1" />
+                        <text x="800" y="110" text-anchor="middle" font-weight="bold" font-size="14" class="posterior-peak">POSTERIOR DENSITY PEAK (θ|D)</text>
                         
-                        <text x="500" y="680">INFERENCE ENGINE V10.7</text>
-                        <text x="1100" y="680" text-anchor="end">SIGNAL RECURSION: ACTIVE</text>
-                        
-                        <!-- Formula Block -->
-                        <rect x="50" y="50" width="300" height="80" stroke="var(--color-2)" stroke-width="1" fill="rgba(201,169,110,0.05)" />
+                        <rect x="50" y="50" width="300" height="80" stroke="var(--color-2)" stroke-width="1" fill="rgba(201,169,110,0.05)" class="formula-container" />
                         <text x="70" y="85" font-size="20" font-style="italic">P(θ|D) = [P(D|θ)P(θ)] / P(D)</text>
                         <text x="70" y="110" font-size="10">BAYESIAN TRUTH SYNTHESIS MANIFOLD</text>
-                        
-                        <!-- Axes -->
-                        <line x1="100" y1="700" x2="1300" y2="700" stroke="var(--color-2)" stroke-width="2" />
-                        <line x1="100" y1="700" x2="100" y2="100" stroke="var(--color-2)" stroke-width="2" />
-                        <text x="1300" y="720" text-anchor="end">PARAMETER SPACE (θ)</text>
-                        <text x="80" y="120" transform="rotate(-90 80 120)" text-anchor="end">EVIDENCE MAGNITUDE</text>
                     </g>
 
-                    <!-- Data Nodes (The Agents) -->
-                    <g fill="var(--color-2)">
-                        <circle cx="800" cy="150" r="6" />
-                        <circle cx="650" cy="350" r="4" opacity="0.6"/>
-                        <circle cx="950" cy="350" r="4" opacity="0.6"/>
-                        <path d="M650 350 L 800 150 L 950 350" stroke="var(--color-2)" stroke-width="1" stroke-dasharray="5 5" />
-                    </g>
+                    <!-- Particle Spawn Group -->
+                    <g id="signal-stream"></g>
 
                     <!-- Scanning Identity -->
                     <rect x="0" y="0" width="100%" height="1" fill="var(--color-2)" opacity="0.3">
@@ -593,6 +609,7 @@
             <p class="lead-text" style="color: var(--color-2); font-weight: 400;">
                 V10.7.0 operates as an institutional <strong>"Digital Dragnet,"</strong> integrating multi-vector signals into a raw, high-conviction investment thesis.
             </p>
+            <div id="truth-synthesis-stream"></div>
             <div class="hero-stats">
                 <div class="stat-item">
                     <h3>0.1499</h3>
@@ -841,6 +858,64 @@
         scene.add(points);
 
         camera.position.z = 1000;
+
+        // Signal Simulation
+        const signalGroup = document.getElementById('signal-stream');
+        const truthStream = document.getElementById('truth-synthesis-stream');
+        const logs = [
+            "INGESTING LINKEDIN DATA...",
+            "COMMIT HASH VERIFIED: 0ab62e9",
+            "CALCULATING LIKELIHOOD RATIO...",
+            "BAYESIAN UPDATE: θ -> 0.98",
+            "RECURSIVE AGENT SPAWNED.",
+            "ISOTONIC MAP CALIBRATED.",
+            "POSTERIOR DENSITY STABILIZED."
+        ];
+
+        function createSignal() {
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            const side = Math.floor(Math.random() * 4);
+            let x, y;
+            if(side === 0) { x = Math.random() * 1400; y = -10; }
+            else if(side === 1) { x = 1410; y = Math.random() * 900; }
+            else if(side === 2) { x = Math.random() * 1400; y = 910; }
+            else { x = -10; y = Math.random() * 900; }
+
+            circle.setAttribute("cx", x);
+            circle.setAttribute("cy", y);
+            circle.setAttribute("r", Math.random() * 3 + 1);
+            circle.setAttribute("class", "signal-particle");
+            
+            signalGroup.appendChild(circle);
+
+            const duration = Math.random() * 2000 + 1000;
+            const startTime = performance.now();
+
+            function updateSignal(time) {
+                const elapsed = time - startTime;
+                const p = elapsed / duration;
+                if(p >= 1) {
+                    circle.remove();
+                    return;
+                }
+                const curX = x + (800 - x) * p;
+                const curY = y + (150 - y) * p; // Heavy focus on the peak
+                circle.setAttribute("cx", curX);
+                circle.setAttribute("cy", curY);
+                circle.setAttribute("opacity", 1 - p);
+                requestAnimationFrame(updateSignal);
+            }
+            requestAnimationFrame(updateSignal);
+        }
+
+        setInterval(createSignal, 150);
+
+        setInterval(() => {
+            const logLine = document.createElement('div');
+            logLine.innerText = logs[Math.floor(Math.random() * logs.length)];
+            truthStream.prepend(logLine);
+            if(truthStream.children.length > 8) truthStream.lastChild.remove();
+        }, 800);
 
         function animate() {
             requestAnimationFrame(animate);
