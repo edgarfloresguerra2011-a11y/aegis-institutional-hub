@@ -540,80 +540,85 @@
         @media (max-width: 768px) {
             html, body { overflow-x: hidden; width: 100%; position: relative; }
             
-            .hero { 
-                padding: 100px 20px 40px 20px; 
-                justify-content: flex-start;
-                min-height: auto;
-                height: auto;
+            /* Universal Typography Reset */
+            h1, h2, .section-title, .hero h1 { 
+                font-size: 2.2rem !important; 
+                line-height: 1.1 !important; 
+                margin-bottom: 20px !important; 
+                text-align: left !important; 
+                letter-spacing: -1px !important;
             }
-            .hero h1 { font-size: 2.2rem; transform: none !important; margin-bottom: 15px; }
-            .hero p { font-size: 0.95rem; margin-bottom: 25px; max-width: 100%; text-align: left; letter-spacing: 0; }
-            .lead-text { font-size: 0.95rem; line-height: 1.6; }
+            h1 span, h2 span { display: inline !important; }
+
+            .hero { 
+                padding: 100px 20px 40px 20px !important; 
+                justify-content: flex-start !important;
+                min-height: auto !important;
+                height: auto !important;
+            }
+            .hero p, .lead-text, .section p { 
+                font-size: 0.95rem !important; 
+                margin-bottom: 20px !important; 
+                max-width: 100% !important; 
+                text-align: left !important; 
+                line-height: 1.6 !important;
+            }
             
             .hero-stats { 
-                flex-direction: column; 
-                gap: 15px; 
-                align-items: flex-start;
-                margin-top: 30px;
-                padding-left: 15px;
-                border-left: 2px solid var(--color-2);
+                flex-direction: column !important; 
+                gap: 15px !important; 
+                align-items: flex-start !important;
+                margin-top: 30px !important;
+                padding-left: 15px !important;
+                border-left: 2px solid var(--color-2) !important;
+                display: flex !important;
             }
-            .stat-item h3 { font-size: 1.3rem; margin-bottom: 2px; }
-            .stat-item p { font-size: 0.6rem; }
+            .stat-item h3 { font-size: 1.8rem !important; color: var(--color-2) !important; margin: 0 !important; }
+            .stat-item p { font-size: 0.65rem !important; opacity: 0.7 !important; }
             
-            .section-title { font-size: 1.7rem; margin-bottom: 25px; }
-            .section { padding: 50px 20px; }
+            .section { padding: 40px 20px !important; }
+            .section-title { margin-top: 20px !important; }
             
             .specs-grid, .plans-container, .contact-container, .footer-grid { 
                 grid-template-columns: 1fr !important; 
-                gap: 30px; 
+                gap: 20px !important; 
+                display: grid !important;
             }
             
-            nav { padding: 10px 20px; }
-            .logo { font-size: 1.3rem; }
-            .nav-links { display: none; }
+            nav { padding: 15px 20px !important; }
+            .logo { font-size: 1.3rem !important; }
+            .nav-links { display: none !important; }
             
-            #truth-synthesis-stream { display: none; }
+            #truth-synthesis-stream { display: none !important; }
             .hero-diagram { height: 40% !important; bottom: 0; top: auto !important; opacity: 0.08 !important; }
             
-            .version-badge { font-size: 0.5rem; padding: 3px 6px; }
+            .version-badge { font-size: 0.5rem !important; padding: 3px 6px !important; }
             
-            /* DESTRUCTIVE MOBILE TABLE RESET */
+            /* Destructive Technical Card Reset */
             .arch-table, .arch-table thead, .arch-table tbody, .arch-table th, .arch-table td, .arch-table tr { 
-                display: block; 
+                display: block !important; 
                 width: 100% !important;
             }
-            .arch-table thead { display: none; }
+            thead, .arch-table thead { display: none !important; }
             .arch-table tr { 
-                margin-bottom: 30px; 
-                border-bottom: 1px solid rgba(201,169,110,0.2); 
-                padding-bottom: 20px;
-                background: rgba(255,255,255,0.02);
-                padding: 20px;
+                margin-bottom: 20px !important; 
+                border: 1px solid rgba(201,169,110,0.1) !important; 
+                padding: 15px !important;
+                background: rgba(255,255,255,0.02) !important;
             }
             .arch-table td { 
-                padding: 8px 0 !important; 
+                padding: 5px 0 !important; 
                 text-align: left !important;
                 border: none !important;
-                white-space: normal !important;
             }
-            .level-code { 
-                font-size: 0.65rem; 
-                opacity: 0.5; 
-                text-transform: uppercase;
-                margin-bottom: 5px;
-            }
-            .component-name { 
-                font-size: 1.1rem; 
-                color: var(--color-2);
-                margin-bottom: 8px;
-                font-family: var(--font-display);
-            }
-            .component-desc { 
-                font-size: 0.85rem; 
-                line-height: 1.5;
-                color: rgba(255,255,255,0.7);
-            }
+            .level-code { font-size: 0.65rem !important; display: block !important; margin-bottom: 4px !important; }
+            .component-name { font-size: 1rem !important; margin-bottom: 6px !important; }
+            .component-desc { font-size: 0.8rem !important; line-height: 1.4 !important; }
+
+            /* Card Adjustments */
+            .card { padding: 20px !important; }
+            h3 { font-size: 1.2rem !important; margin-bottom: 10px !important; }
+            .price { font-size: 1.8rem !important; }
         }
     </style>
 </head>
