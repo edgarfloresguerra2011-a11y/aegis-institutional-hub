@@ -538,54 +538,82 @@
         }
 
         @media (max-width: 768px) {
-            html, body { overflow-x: hidden; width: 100%; }
+            html, body { overflow-x: hidden; width: 100%; position: relative; }
+            
             .hero { 
-                padding: 120px 20px 60px 20px; 
+                padding: 100px 20px 40px 20px; 
                 justify-content: flex-start;
                 min-height: auto;
+                height: auto;
             }
-            .hero h1 { font-size: 2.2rem; transform: none !important; margin-bottom: 20px; }
-            .hero p { font-size: 1rem; margin-bottom: 30px; max-width: 100%; text-align: left; }
-            .lead-text { font-size: 1rem; }
+            .hero h1 { font-size: 2.2rem; transform: none !important; margin-bottom: 15px; }
+            .hero p { font-size: 0.95rem; margin-bottom: 25px; max-width: 100%; text-align: left; letter-spacing: 0; }
+            .lead-text { font-size: 0.95rem; line-height: 1.6; }
+            
             .hero-stats { 
                 flex-direction: column; 
-                gap: 20px; 
+                gap: 15px; 
                 align-items: flex-start;
-                margin-top: 40px;
-                padding-left: 10px;
-                border-left: 1px solid var(--color-2);
+                margin-top: 30px;
+                padding-left: 15px;
+                border-left: 2px solid var(--color-2);
             }
-            .stat-item h3 { font-size: 1.4rem; color: var(--color-2); }
-            .stat-item p { font-size: 0.65rem; opacity: 0.7; }
+            .stat-item h3 { font-size: 1.3rem; margin-bottom: 2px; }
+            .stat-item p { font-size: 0.6rem; }
             
-            .section-title { font-size: 1.8rem; margin-bottom: 30px; text-align: left; }
-            .section { padding: 60px 20px; }
+            .section-title { font-size: 1.7rem; margin-bottom: 25px; }
+            .section { padding: 50px 20px; }
             
             .specs-grid, .plans-container, .contact-container, .footer-grid { 
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr !important; 
                 gap: 30px; 
             }
             
-            nav { padding: 15px 20px; }
-            .logo { font-size: 1.5rem; }
+            nav { padding: 10px 20px; }
+            .logo { font-size: 1.3rem; }
             .nav-links { display: none; }
             
             #truth-synthesis-stream { display: none; }
-            .hero-diagram { height: 50% !important; bottom: 0; top: auto !important; opacity: 0.1 !important; }
+            .hero-diagram { height: 40% !important; bottom: 0; top: auto !important; opacity: 0.08 !important; }
             
-            .version-badge { font-size: 0.55rem; padding: 4px 8px; }
+            .version-badge { font-size: 0.5rem; padding: 3px 6px; }
             
-            /* Architecture Table Mobile */
-            .arch-table tr { 
-                display: flex; 
-                flex-direction: column; 
-                padding: 20px 0;
-                border-bottom: 1px solid rgba(201,169,110,0.1);
+            /* DESTRUCTIVE MOBILE TABLE RESET */
+            .arch-table, .arch-table thead, .arch-table tbody, .arch-table th, .arch-table td, .arch-table tr { 
+                display: block; 
+                width: 100% !important;
             }
-            .arch-table td { padding: 5px 0 !important; }
-            .level-code { font-size: 0.7rem; margin-bottom: 5px; }
-            .component-name { font-size: 1rem; margin-bottom: 5px; }
-            .component-desc { font-size: 0.8rem; opacity: 0.8; }
+            .arch-table thead { display: none; }
+            .arch-table tr { 
+                margin-bottom: 30px; 
+                border-bottom: 1px solid rgba(201,169,110,0.2); 
+                padding-bottom: 20px;
+                background: rgba(255,255,255,0.02);
+                padding: 20px;
+            }
+            .arch-table td { 
+                padding: 8px 0 !important; 
+                text-align: left !important;
+                border: none !important;
+                white-space: normal !important;
+            }
+            .level-code { 
+                font-size: 0.65rem; 
+                opacity: 0.5; 
+                text-transform: uppercase;
+                margin-bottom: 5px;
+            }
+            .component-name { 
+                font-size: 1.1rem; 
+                color: var(--color-2);
+                margin-bottom: 8px;
+                font-family: var(--font-display);
+            }
+            .component-desc { 
+                font-size: 0.85rem; 
+                line-height: 1.5;
+                color: rgba(255,255,255,0.7);
+            }
         }
     </style>
 </head>
